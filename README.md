@@ -1,4 +1,4 @@
-# ranking_info_retrieval
+# Ranking-info-retrieval
 ## Basic retrieval engine based on tf-idf
 
 This project implements the following algorithms for document-query similarity computation and ranking:
