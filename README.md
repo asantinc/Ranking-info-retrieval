@@ -8,12 +8,11 @@ This project implements the following basic algorithms for document-query simila
 
 report.pdf contains further description of the implementation and key results.
 
-#The Code
-The code is found in the ranking/ folder. The output of each algorithm is written to output_ranking/ folder into a file with name algo_name.top. 
+#How to run the code
+All code is found in the ranking/ folder. The output of each algorithm is written to output_ranking/ folder into a file with name 'algo_name'.top. 
 
-The performance of each of the algorithms can be evaluated using the trec_eval program, also included under ranking/. To do so, from the command line run:
-- trec_eval -o -c -M1000 truth.rel overlap.top
-- trec_eval -o -c -M1000 truth.rel tfidf.top
-- trec_eval -o -c -M1000 truth.rel best.top
+The performance of each of the algorithms can be evaluated using the trec_eval program, also included under ranking/. The script compares the results printed out by the search algorithm into a .top file to the relevant documents included in truth.rel. To perform the evaluation, from the command line run:
+
+- ranking/trec_eval -o -c -M1000 data/truth.rel data/overlap.top
 
 The program prints a number of standard effectiveness measures for each algorithm.
