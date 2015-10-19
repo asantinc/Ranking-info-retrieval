@@ -5,6 +5,7 @@ import re
 from nltk.stem.snowball import SnowballStemmer
 
 
+
 def cleanUpTextStem(text, nGrams):
     '''Remove punctuation as defined by python, lower case text and split into token'
     '''
@@ -119,3 +120,52 @@ def tfidfWordWeighting(word, docId, wordDict, documents, docLengthList, averageD
     else:
         return 0
                           
+
+def get_documents(doc_file='data/docs.txt'):
+    '''
+    Return inverted index for each document, and across all documents
+    '''
+    all_documents = list()
+    term_dictionary = dict()
+
+    with open(doc_file) as doc_file:
+        for doc in doc_file:                        		
+            docDictionary = dict()
+            token_list = textmanip.cleanUpText(doc)
+
+            for token in token_list:             		#add tokens to document and overall dictionaries
+                if token in term_dictionary:
+                    term_dictionary[token] += 1
+                    if token in docDictionary:
+                        docDictionary[token] += 1
+                    else:
+                        docDictionary[token] = 1
+                else:                           		#include unseen token in both dicts
+                    term_dictionary[token] = 1
+                    docDictionary[token] = 1
+                all_documents.append(docDictionary)
+    return all_documents, term_dictionary
+
+
+def get_queries(q_file='data/qrys.txt'):
+    '''
+    Return inverted index for each query, and across all documents
+    '''
+    all_queries = list()
+    with q_file as query_file:
+        for query in query_file:
+            token_list = textmanip.cleanUpText(query)
+            queryDict = dict()
+            i = 0
+            for t in token_list:
+                if i == 0: 			    		
+                    i = 1
+                else:
+                    if t in queryDict:
+                        queryDict[t]+=1
+                    else:
+                        queryDict[t] = 1
+            all_queries.append(queryDict)
+    return all_queries
+
+
