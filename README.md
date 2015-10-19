@@ -1,5 +1,5 @@
 # Ranking-info-retrieval
-## Basic retrieval engine based on tf-idf
+## Retrieval engine based on tf-idf
 
 This project implements the following basic algorithms for document-query similarity computation and ranking:
 - **Overlap**: uses the overlap between non-capitalized words to rank the documents relative to a given query
