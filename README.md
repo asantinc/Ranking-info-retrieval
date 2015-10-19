@@ -15,4 +15,5 @@ The performance of each of the algorithms can be evaluated using the trec_eval p
 - trec_eval -o -c -M1000 truth.rel overlap.top
 - trec_eval -o -c -M1000 truth.rel tfidf.top
 - trec_eval -o -c -M1000 truth.rel best.top
+
 The program prints a number of standard effectiveness measures for each algorithm.
