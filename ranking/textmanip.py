@@ -112,12 +112,4 @@ def tfidfWordWeighting(word, docId, wordDict, documents, docLengthList, averageD
 	return TF_Doc*IDF
     else:
         return 0
-    
-
-
-
-
-
-
-
                           
