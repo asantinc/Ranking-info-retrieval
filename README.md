@@ -1,4 +1,4 @@
-# Ranking-info-retrieval: Search engine for text
+# Search engine for text
 
 #Overview
 This project implements the following basic algorithms for document-query similarity computation and ranking:
