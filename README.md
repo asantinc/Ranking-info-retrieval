@@ -7,9 +7,9 @@ This project implements the following basic algorithms for document-query simila
 - **Rocchio**: As in 2, this algorithm uses td-idf and the weighted sum formula for an initial ranking, but then optimizes the original query using Rocchio’s algorithm
 
 The performance of each of the algorithms can be evaluated using the trec_eval program, also included. To do so, from the command line run:
-     trec_eval -o -c -M1000 truth.rel overlap.top
-     trec_eval -o -c -M1000 truth.rel tfidf.top
-     trec_eval -o -c -M1000 truth.rel best.top
+     - trec_eval -o -c -M1000 truth.rel overlap.top
+     - trec_eval -o -c -M1000 truth.rel tfidf.top
+     - trec_eval -o -c -M1000 truth.rel best.top
 The program prints a number of standard effectiveness measures for your algorithm.
 
 report.pdf contains a description of the implemtation and the key results.
