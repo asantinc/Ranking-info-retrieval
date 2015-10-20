@@ -1,66 +1,53 @@
 # -*- coding: utf-8 -*-
-import string
 import textmanip
 import sys
 import numpy
 import math
 
-docFile = open("docs.txt")
-documents = list()
-wordDict = dict()						#keep track of all word frequency and idf
-docLengthList = list()
-averageDocLength = 0
-docNumber = 0
+K = 2
 
-for doc in docFile:                        			#get the documents
-    docDict = dict()
-    token_list = textmanip.cleanUpText(doc)
-    docLengthList.insert(docNumber, 0)				#set up the length of this doc, will update as we see tokens
-    for token in token_list:             			#add tokens to document and overall dictionaries
-	if token in wordDict:
-	    wordDict[token][0] = wordDict[token][0]+1 
-	    if token in docDict:				#check if we've seen this token in this doc before
-		docDict[token] = docDict[token]+1	
-	    else:
-		docDict[token] = 1				#increase frequency to ONE: *first* encounter of token in this doc 
-		wordDict[token][1] = wordDict[token][1]+1 	#increase idf: *first* encounter of token in this doc
-	else:						  	#if not in wordDict, we can't have seen it in this doc either
-	    wordDict[token] = [1,1] 			  	#list will store frequency and the idf for token
-	    docDict[token] = 1					#frequency in this doc is 1
-	docLengthList[docNumber] = docLengthList[docNumber]+1 	#increase list for every token
-    docNumber = docNumber+1	
-    documents.append(docDict)
-docFile.close()                            			#close document file
+def tfidf(word_dict, queries, documents, doc_lengths):
+    '''
+    Calculate tf.idf score for all queries with every doc available
+    '''
+    query_doc_similarities = list()	   				#index it by list[query_i][doc_j]
+    avg_doc_len = numpy.average(doc_lengths)
 
-#get the query tokens
-qfile = open("qrys.txt")  	    				  
-queries = list()			    			#list of queryDictionaries
-for query in qfile:
-    token_list = textmanip.cleanUpText(query)
-    queryDict = dict()
-    i = 0
-    for t in token_list:
-	if i == 0: 			    			#ignore the query number for all queries
-	    i = 1
-	else:
-	    if t in queryDict:
-		queryDict[t] = queryDict[t]+1
-	    else:
-		queryDict[t] = 1
-    queries.append(queryDict)
-qfile.close()                           			#close query file
+    for query_counter, query_dic in enumerate(queries):
+        query_doc_similarities.insert(query_counter, list())		#store similarities between this query and all docs in this list
+
+        for doc_counter, doc_dict in enumerate(documents):
+            similarity = 0
+            doc_len = doc_lengths[doc_counter]
+            fudge = (K*doc_len)/avg_doc_len
+
+            for word in query_dic:
+                if word in doc_dic:				#if not in the document, similarity value added by this word is zero
+                    frequencyInDoc = doc_dic[word]
+                    inverseDocFrequency = word_dict[word][1]
+                    IDF = math.log(len(documents)/inverseDocFrequency)
+                    TF_Doc = frequencyInDoc/(frequencyInDoc+fudge)
+                    TF_Query = query_dic[word]
+                    similarity += TF_query*TF_Doc*IDF
+            #insert similarity at this doc's position in the current queries' list
+            query_doc_similarities[query_counter].append(similarity)
+    return query_doc_similarities
 
 
-#calculate the tfidf weigthed sum for each document query pair
-queryDocSimilaryList = list()	   				#list[query_i][doc_j]
-queryCounter = 0
-averageDocLength = numpy.average(docLengthList)
-k = 2
-queryDocSimilaryList = textmanip.tfidf(wordDict, queries, documents, docLengthList)
-textmanip.outputResults(queryDocSimilaryList, 'tfidf.top')
+def tfidf_search(out_file='overlap.top'):
+    '''
+    Evaluate document relevance with respect to query by calculating overlap
+    in terms between them.
+    '''
+    #get all documents and queries
+    all_documents, term_dictionary, doc_lengths = textmanip.get_documents()
+    all_queries = textmanip.get_queries()
+
+    #calculate the tfidf weigthed sum for each document query pair
+    query_doc_similarities = tfidf(word_dict, queries, documents, doc_lengths)
+    textmanip.outputResults(query_doc_similarities, 'tfidf.top')
 
 
-
-
-
+if __name__ == '__main__':
+    tdidf_search()
 

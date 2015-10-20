@@ -8,7 +8,7 @@ def overlap_search(out_file='overlap.top'):
     in terms between them.
     '''
     #get all documents
-    all_documents, term_dictionary = textmanip.get_documents()
+    all_documents, term_dictionary, _ = textmanip.get_documents()
     all_queries = textmanip.get_queries()
 
 
