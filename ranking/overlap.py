@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
-import textmanip
+'''Overlap scoring
+Function to calculate score for each document by checking the overlap between each
+query and all documents'''
 
+import ranking.textmanip as textmanip
 
 def overlap_search(out_file='overlap.top'):
     '''
@@ -8,23 +11,22 @@ def overlap_search(out_file='overlap.top'):
     in terms between them.
     '''
     #get all documents
-    all_documents, term_dictionary, _ = textmanip.get_documents()
+    all_documents, _, _ = textmanip.get_documents()
     all_queries = textmanip.get_queries()
 
-
     #find the overlap between each query and the all_documents
-    queryDocList = list()                   		#for each query, it includes the similarity of that query with every document
-    for queryDict in all_queries:
-        documentRankings = list()                 		#list with the number of similarities between each query_i  and every document
-        for documentDict in all_documents:      		
-                docGrade = 0                    	
-                for word in queryDict:   			
-                    if word in documentDict:    		#if the word is actually in the document dictionary, increase its value by one
-                        docGrade += 1
-                documentRankings.append(docGrade)		#store the ranking for the current document (relative to query_i)
-        queryDocList.append(documentRankings)
+    query_doc_list = list()
+    for query_dict in all_queries:
+        doc_rankings = list()
+        for doc_dict in all_documents:
+            doc_grade = 0
+            for word in query_dict:
+                if word in doc_dict:
+                    doc_grade += 1
+            doc_rankings.append(doc_grade)
+        query_doc_list.append(doc_rankings)
 
-    textmanip.outputResults(queryDocList, 'output_ranking/{}'.format(out_file))
+    textmanip.outputResults(query_doc_list, 'output_ranking/{}'.format(out_file))
 
 if __name__ == '__main__':
     overlap_search()
